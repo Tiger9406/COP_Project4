@@ -8,5 +8,7 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(COP_Project4 main.cpp
         Toolbox.cpp
-        Toolbox.h)
+        Toolbox.h
+        Button.cpp
+        Button.h)
 target_link_libraries(COP_Project4 sfml-graphics sfml-audio)
