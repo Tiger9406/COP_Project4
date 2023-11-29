@@ -17,21 +17,11 @@ public:
 //    Button* newGameButton;
 //    Button* testButton1;
 //    Button* testButton2;
-    static Toolbox& getInstance(){
-        static Toolbox instance;
-        return instance;
-    }
+    static Toolbox& getInstance();
 private:
-    Toolbox(){
-//        gameState = nullptr;
-//        debugButton = nullptr;
-//        newGameButton = nullptr;
-//        testButton1 = nullptr;
-//        testButton2 = nullptr;
-
-        // Initialize the SFML window
-        window.create(sf::VideoMode(800, 600), "SFML Window");
-    };
+    Toolbox(const Toolbox&) = delete;
+    Toolbox& operator=(const Toolbox&) = delete;
+    Toolbox();
 };
 
 
