@@ -13,6 +13,7 @@ void render();
 void toggleDebugMode();
 bool getDebugMode();
 int gameLoop();
+int main();
 
 
 #endif //COP_PROJECT4_MINESWEEPER_H

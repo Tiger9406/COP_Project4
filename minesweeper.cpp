@@ -38,3 +38,4 @@ int gameLoop() {
     // game loop
     return 0;
 }
+int main(){ return launch(); }

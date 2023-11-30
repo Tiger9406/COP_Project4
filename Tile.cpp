@@ -32,6 +32,7 @@ void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
 void Tile::onClickLeft() {
     if (currentState == HIDDEN) {
         setState(REVEALED);
+        draw();
     }
     else if(currentState==REVEALED){
         revealNeighbors();
@@ -57,6 +58,7 @@ void Tile::revealNeighbors() {
     for(Tile* neighbor : neighbors){
         if(neighbor && neighbor->getState()==HIDDEN){
             neighbor->setState(REVEALED);
+            neighbor->draw();
         }
     }
 }
