@@ -10,6 +10,7 @@
 
 
 class GameState {
+public:
     enum PlayStatus { WIN, LOSS, PLAYING };
 
     GameState(sf::Vector2i _dimensions = sf::Vector2i(25, 16), int _numberOfMines = 50);
