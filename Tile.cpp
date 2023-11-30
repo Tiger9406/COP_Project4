@@ -31,7 +31,10 @@ void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
 
 void Tile::onClickLeft() {
     if (currentState == HIDDEN) {
-        // action depending on what it is
+        setState(REVEALED);
+    }
+    else if(currentState==REVEALED){
+        revealNeighbors();
     }
 }
 
@@ -45,13 +48,15 @@ void Tile::onClickRight() {
 }
 
 void Tile::draw() {
-    // probably used in a lot of places: draw with sfml
+    if(currentState==HIDDEN){
+
+    }
 }
 
 void Tile::revealNeighbors() {
-    for (Tile* neighbor : neighbors) {
-        if (neighbor && neighbor->getState() == HIDDEN) {
-            // set neighbor status/actions
+    for(Tile* neighbor : neighbors){
+        if(neighbor && neighbor->getState()==HIDDEN){
+            neighbor->setState(REVEALED);
         }
     }
 }

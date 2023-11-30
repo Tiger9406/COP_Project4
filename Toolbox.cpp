@@ -10,11 +10,11 @@ Toolbox& Toolbox::getInstance() {
 }
 
 Toolbox::Toolbox(){
-//        gameState = nullptr;
-//        debugButton = nullptr;
-//        newGameButton = nullptr;
-//        testButton1 = nullptr;
-//        testButton2 = nullptr;
+        gameState = nullptr;
+        debugButton = nullptr;
+        newGameButton = nullptr;
+        testButton1 = nullptr;
+        testButton2 = nullptr;
 
         // Initialize the SFML window
         window.create(sf::VideoMode(800, 600), "SFML Window");

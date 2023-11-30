@@ -6,17 +6,19 @@
 #define COP_PROJECT4_TOOLBOX_H
 
 #include <SFML/Graphics.hpp>
+#include "GameState.h"
+#include "Button.h"
 
 
 class Toolbox {
 public:
     sf::RenderWindow window;
-//    GameState* gameState;
-//
-//    Button* debugButton;
-//    Button* newGameButton;
-//    Button* testButton1;
-//    Button* testButton2;
+    GameState* gameState;
+
+    Button* debugButton;
+    Button* newGameButton;
+    Button* testButton1;
+    Button* testButton2;
     static Toolbox& getInstance();
 private:
     Toolbox(const Toolbox&) = delete;
