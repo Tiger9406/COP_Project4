@@ -10,5 +10,7 @@ add_executable(COP_Project4 main.cpp
         Toolbox.cpp
         Toolbox.h
         Button.cpp
-        Button.h)
+        Button.h
+        Tile.cpp
+        Tile.h)
 target_link_libraries(COP_Project4 sfml-graphics sfml-audio)
