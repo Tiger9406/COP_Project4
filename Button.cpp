@@ -25,6 +25,7 @@ void Button::setSprite(sf::Sprite* _sprite){
     sprite->setPosition(position.x, position.y);
 }
 
+
 void Button::onClick(){
     onClickCallback();
 }

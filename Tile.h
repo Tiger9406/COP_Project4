@@ -26,6 +26,8 @@ public:
     void onClickLeft();
     void onClickRight();
     void draw();
+    sf::Texture state;
+    sf::Sprite sprite;
 protected:
     void revealNeighbors();
 private:
@@ -33,8 +35,6 @@ private:
     State currentState;
     std::array<Tile*, 8> neighbors;
 
-    sf::Texture state;
-    sf::Sprite sprite;
 };
 
 
