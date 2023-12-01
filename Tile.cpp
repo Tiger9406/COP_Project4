@@ -5,7 +5,6 @@
 #include "Tile.h"
 
 Tile::Tile(sf::Vector2f _position) : position(_position), currentState(HIDDEN) {
-    //maybe more code later
 }
 
 sf::Vector2f Tile::getLocation() {
@@ -48,17 +47,18 @@ void Tile::onClickRight() {
     // lower flag count
 }
 
-void Tile::draw() {
+void Tile::draw(sf::RenderWindow& window) {
     if(currentState==HIDDEN){
+        sf::Texture state;
 
     }
 }
 
-void Tile::revealNeighbors() {
+void Tile::revealNeighbors(sf::RenderWindow& window) {
     for(Tile* neighbor : neighbors){
         if(neighbor && neighbor->getState()==HIDDEN){
             neighbor->setState(REVEALED);
-            neighbor->draw();
+            neighbor->draw(window);
         }
     }
 }

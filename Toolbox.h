@@ -24,8 +24,8 @@ public:
     static Toolbox& getInstance();
 
 private:
-    Toolbox(const Toolbox&) = delete;
-    Toolbox& operator=(const Toolbox&) = delete;
+    Toolbox(const Toolbox&);
+    Toolbox& operator=(const Toolbox&);
     Toolbox();
     ~Toolbox();
 };

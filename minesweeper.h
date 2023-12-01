@@ -52,8 +52,20 @@ int launch() {
             }
             if(event.type==sf::Event::MouseButtonPressed){
                 sf::Vector2f mouse_pos=toolbox.window.mapPixelToCoords(sf::Mouse::getPosition(toolbox.window));
+                bool left= event.mouseButton.button==sf::Mouse::Left;
                 if(mouse_pos.y>530.0f){
-                    //check for click bottom four buttons
+                    if(toolbox.newGameButton->clicked(mouse_pos, left)){
+                        continue;
+                    }
+                    else if(toolbox.debugButton->clicked(mouse_pos, left)){
+                        continue;
+                    }
+                    else if(toolbox.testButton1->clicked(mouse_pos, left)){
+                        continue;
+                    }
+                    else if(toolbox.testButton2->clicked(mouse_pos, left)){
+                        continue;
+                    }
                 }
                 else{
                     //check for click tiles

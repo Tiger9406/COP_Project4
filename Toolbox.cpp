@@ -27,11 +27,3 @@ Toolbox::Toolbox(){
 //
 
 }
-
-Toolbox::~Toolbox() {
-    delete gameState;
-    delete debugButton;
-    delete newGameButton;
-    delete testButton1;
-    delete testButton2;
-}
