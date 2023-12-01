@@ -7,7 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <array>
-#include "Toolbox.h"
+
 
 class Tile {
 public:
@@ -25,13 +25,16 @@ public:
     void setNeighbors(std::array<Tile*, 8> _neighbors);
     void onClickLeft();
     void onClickRight();
-    void draw(sf::RenderWindow& window);
+    void draw();
 protected:
-    void revealNeighbors(sf::RenderWindow& window);
+    void revealNeighbors();
 private:
     sf::Vector2f position;
     State currentState;
     std::array<Tile*, 8> neighbors;
+
+    sf::Texture state;
+    sf::Sprite sprite;
 };
 
 

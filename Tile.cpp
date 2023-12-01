@@ -3,8 +3,10 @@
 //
 
 #include "Tile.h"
+#include "Toolbox.h"
 
 Tile::Tile(sf::Vector2f _position) : position(_position), currentState(HIDDEN) {
+
 }
 
 sf::Vector2f Tile::getLocation() {
@@ -47,18 +49,20 @@ void Tile::onClickRight() {
     // lower flag count
 }
 
-void Tile::draw(sf::RenderWindow& window) {
+void Tile::draw() {
+    Toolbox& toolbox=Toolbox::getInstance();
     if(currentState==HIDDEN){
-        sf::Texture state;
-
+        state.loadFromFile("images/tile_hidden.png");
+        sprite.setTexture(state);
+        toolbox.window.draw(sprite);
     }
 }
 
-void Tile::revealNeighbors(sf::RenderWindow& window) {
+void Tile::revealNeighbors() {
     for(Tile* neighbor : neighbors){
         if(neighbor && neighbor->getState()==HIDDEN){
             neighbor->setState(REVEALED);
-            neighbor->draw(window);
+            neighbor->draw();
         }
     }
 }

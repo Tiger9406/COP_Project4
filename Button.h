@@ -17,7 +17,7 @@ public:
     sf::Sprite* getSprite();
     void setSprite(sf::Sprite* _sprite);
     void onClick();
-    void draw(sf::RenderWindow& window);
+    void draw();
     bool clicked(sf::Vector2f& click_pos, bool left);
 private:
     sf::Vector2f position;

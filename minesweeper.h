@@ -16,11 +16,10 @@ bool debugMode=false;
 
 
 void render() {
-
-    toolbox.debugButton->draw(toolbox.window);
-    toolbox.newGameButton->draw(toolbox.window);
-    toolbox.testButton1->draw(toolbox.window);
-    toolbox.testButton2->draw(toolbox.window);
+    toolbox.debugButton->draw();
+    toolbox.newGameButton->draw();
+    toolbox.testButton1->draw();
+    toolbox.testButton2->draw();
 }
 
 int launch() {

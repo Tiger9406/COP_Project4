@@ -6,8 +6,10 @@
 #define COP_PROJECT4_TOOLBOX_H
 
 #include <SFML/Graphics.hpp>
+
 #include "GameState.h"
 #include "Button.h"
+
 #include <iostream>
 
 

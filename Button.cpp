@@ -3,6 +3,7 @@
 //
 
 #include "Button.h"
+#include "Toolbox.h"
 
 #include <utility>
 
@@ -28,8 +29,9 @@ void Button::onClick(){
     onClickCallback();
 }
 
-void Button::draw(sf::RenderWindow& window) {
-    window.draw(*sprite);
+void Button::draw() {
+    Toolbox &toolbox = Toolbox::getInstance();
+    toolbox.window.draw(*sprite);
 }
 
 bool Button::clicked(sf::Vector2f& click_pos, bool left){

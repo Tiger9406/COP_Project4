@@ -27,3 +27,7 @@ Toolbox::Toolbox(){
 //
 
 }
+
+Toolbox::~Toolbox() {
+
+}
