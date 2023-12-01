@@ -56,16 +56,17 @@ void Tile::draw() {
     Toolbox& toolbox=Toolbox::getInstance();
     if(currentState==HIDDEN){
         sprite.setTexture(*toolbox.hidden);
-        toolbox.window.draw(sprite);
     }
     else if(currentState==FLAGGED){
         sprite.setTexture(*toolbox.flagged);
-        toolbox.window.draw(sprite);
+    }
+    else if(currentState==EXPLODED){
+        sprite.setTexture(*toolbox.bombed);
     }
     else if(currentState==REVEALED){
         sprite.setTexture(*toolbox.revealed);
-        toolbox.window.draw(sprite);
     }
+    toolbox.window.draw(sprite);
 }
 
 void Tile::revealNeighbors() {
