@@ -27,3 +27,7 @@ void Button::setSprite(sf::Sprite* _sprite){
 void Button::onClick(){
     onClickCallback();
 }
+
+void Button::draw(sf::RenderWindow& window) {
+    window.draw(*sprite);
+}

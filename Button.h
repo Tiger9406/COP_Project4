@@ -9,6 +9,7 @@
 #include <functional>
 
 
+
 class Button {
 public:
     Button(sf::Vector2f _position, std::function<void(void)> _onClick);
@@ -16,6 +17,7 @@ public:
     sf::Sprite* getSprite();
     void setSprite(sf::Sprite* _sprite);
     void onClick();
+    void draw(sf::RenderWindow& window);
 private:
     sf::Vector2f position;
     sf::Sprite* sprite;

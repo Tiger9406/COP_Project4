@@ -13,16 +13,13 @@ Toolbox& Toolbox::getInstance() {
 Toolbox::Toolbox(){
         gameState = nullptr;
 
-        debugButton = new Button(sf::Vector2f(10.0f, 10.0f), [](){std::cout<<"hello";});
+        debugButton = new Button(sf::Vector2f(590.0f, 530.0f), [](){std::cout<<"hello";});
 
-        newGameButton = new Button(sf::Vector2f(100.0f, 10.0f), [](){std::cout<<"newGame";});
+        newGameButton = new Button(sf::Vector2f(400.0f, 530.0f), [](){std::cout<<"newGame";});
 
+        testButton1 = new Button(sf::Vector2f(660.0f, 530.0f), [](){std::cout<<"test1";});
 
-        testButton1 = new Button(sf::Vector2f(10.0f, 100.0f), [](){std::cout<<"test1";});
-
-
-        testButton2 = new Button(sf::Vector2f(100.0f, 100.0f), [](){std::cout<<"test2";});
-
+        testButton2 = new Button(sf::Vector2f(730.0f, 530.0f), [](){std::cout<<"test2";});
 
         // Initialize the SFML window
         window.create(sf::VideoMode(800, 600), "SFML Sprite Example");

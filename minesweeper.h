@@ -15,16 +15,11 @@ Toolbox& toolbox = Toolbox::getInstance();
 
 
 void render() {
-//    sf::Texture test_texture;
-//    test_texture.loadFromFile("images/face_win.png");
-//    sf::Sprite* test=new sf::Sprite(test_texture);
-//    toolbox.window.draw(*test);
 
-    toolbox.window.draw(*toolbox.debugButton->getSprite());
-    toolbox.window.draw(*toolbox.testButton1->getSprite());
-    toolbox.window.draw(*toolbox.testButton2->getSprite());
-
-
+    toolbox.debugButton->draw(toolbox.window);
+    toolbox.newGameButton->draw(toolbox.window);
+    toolbox.testButton1->draw(toolbox.window);
+    toolbox.testButton2->draw(toolbox.window);
 }
 
 int launch() {
