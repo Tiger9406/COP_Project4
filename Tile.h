@@ -34,7 +34,6 @@ private:
     sf::Vector2f position;
     State currentState;
     std::array<Tile*, 8> neighbors;
-
 };
 
 

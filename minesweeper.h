@@ -20,10 +20,12 @@ void render() {
     toolbox.newGameButton->draw();
     toolbox.testButton1->draw();
     toolbox.testButton2->draw();
+
+    toolbox.gameState->draw();
 }
 
 void restart() {
-    toolbox.gameState= new GameState(sf::Vector2i(25, 16), 50);
+    toolbox.gameState= new GameState();
 }
 
 
@@ -53,7 +55,7 @@ void handleMouseClick(sf::Event &event){
         }
     }
     else{
-        //check for click tiles
+        toolbox.gameState->onClick(mouse_pos, left);
     }
 }
 

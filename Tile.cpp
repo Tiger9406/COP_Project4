@@ -5,8 +5,9 @@
 #include "Tile.h"
 #include "Toolbox.h"
 
-Tile::Tile(sf::Vector2f _position) : position(_position), currentState(HIDDEN) {
 
+Tile::Tile(sf::Vector2f _position) : position(_position), currentState(HIDDEN) {
+    sprite.setPosition(position.x, position.y);
 }
 
 sf::Vector2f Tile::getLocation() {
@@ -33,7 +34,6 @@ void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
 void Tile::onClickLeft() {
     if (currentState == HIDDEN) {
         setState(REVEALED);
-        draw();
     }
     else if(currentState==REVEALED){
         revealNeighbors();
@@ -41,10 +41,13 @@ void Tile::onClickLeft() {
 }
 
 void Tile::onClickRight() {
+    Toolbox& toolbox=Toolbox::getInstance();
     if (currentState == HIDDEN) {
         currentState = FLAGGED;
+        toolbox.gameState->incrementFlag(true);
     } else if (currentState == FLAGGED) {
         currentState = HIDDEN;
+        toolbox.gameState->incrementFlag(false);
     }
     // lower flag count
 }
@@ -52,8 +55,15 @@ void Tile::onClickRight() {
 void Tile::draw() {
     Toolbox& toolbox=Toolbox::getInstance();
     if(currentState==HIDDEN){
-        state.loadFromFile("images/tile_hidden.png");
-        sprite.setTexture(state);
+        sprite.setTexture(*toolbox.hidden);
+        toolbox.window.draw(sprite);
+    }
+    else if(currentState==FLAGGED){
+        sprite.setTexture(*toolbox.flagged);
+        toolbox.window.draw(sprite);
+    }
+    else if(currentState==REVEALED){
+        sprite.setTexture(*toolbox.revealed);
         toolbox.window.draw(sprite);
     }
 }

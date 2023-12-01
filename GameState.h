@@ -22,6 +22,10 @@ public:
     PlayStatus getPlayStatus();
     void setPlayStatus(PlayStatus _status);
 
+
+    void onClick(sf::Vector2f& click_pos, bool left);
+    void draw();
+    void incrementFlag(bool up);
 private:
     sf::Vector2i dimensions;
     int numberOfMines;

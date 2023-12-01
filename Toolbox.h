@@ -25,6 +25,13 @@ public:
 
     static Toolbox& getInstance();
 
+    sf::Texture *hidden;
+    sf::Texture *revealed;
+    sf::Texture *flagged;
+    sf::Texture *bombed;
+
+    std::vector<sf::Texture*> numbers;
+
 private:
     Toolbox(const Toolbox&);
     Toolbox& operator=(const Toolbox&);
