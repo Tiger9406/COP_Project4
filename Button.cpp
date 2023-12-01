@@ -31,3 +31,11 @@ void Button::onClick(){
 void Button::draw(sf::RenderWindow& window) {
     window.draw(*sprite);
 }
+
+bool Button::clicked(sf::Vector2f& click_pos, bool left){
+    if(sprite->getGlobalBounds().contains(click_pos) && left){
+        onClickCallback();
+        return true;
+    }
+    return false;
+}

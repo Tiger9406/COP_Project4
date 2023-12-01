@@ -12,6 +12,7 @@
 
 Toolbox& toolbox = Toolbox::getInstance();
 
+bool debugMode=false;
 
 
 void render() {
@@ -49,12 +50,19 @@ int launch() {
             if(event.type==sf::Event::Closed){
                 toolbox.window.close();
             }
-            //other events
+            if(event.type==sf::Event::MouseButtonPressed){
+                sf::Vector2f mouse_pos=toolbox.window.mapPixelToCoords(sf::Mouse::getPosition(toolbox.window));
+                if(mouse_pos.y>530.0f){
+                    //check for click bottom four buttons
+                }
+                else{
+                    //check for click tiles
+                }
+            }
         }
         toolbox.window.clear();
         render();
         toolbox.window.display();
-
     }
     return 0;
 }
@@ -63,30 +71,16 @@ int launch() {
 
 void restart() {
     toolbox.gameState= new GameState(sf::Vector2i(25, 16), 50);
-    render(); // Render everything
 }
 
 
+void toggleDebugMode() {
+    debugMode = !debugMode;
+}
 
-//void toggleDebugMode() {
-//    debugMode = !debugMode;
-//}
-//
-//bool getDebugMode() {
-//    return debugMode;
-//}
-
-//int gameLoop() {
-//    while (true) {
-//        sf::Event event;
-//        while (window.pollEvent(event)) {
-//            if (event.type == sf::Event::Closed) {
-//                return 0;
-//            }
-//        }
-//    }
-//    return 0;
-//}
+bool getDebugMode() {
+    return debugMode;
+}
 
 int main(){ return launch(); }
 
