@@ -12,16 +12,42 @@
 
 Toolbox& toolbox = Toolbox::getInstance();
 
-void render() {
-    toolbox.window.draw(*(toolbox.debugButton->getSprite()));
 
-    sf::Texture test_texture;
-    test_texture.loadFromFile("images/face_win.png");
-    sf::Sprite* test=new sf::Sprite(test_texture);
-    toolbox.window.draw(*test);
+
+void render() {
+//    sf::Texture test_texture;
+//    test_texture.loadFromFile("images/face_win.png");
+//    sf::Sprite* test=new sf::Sprite(test_texture);
+//    toolbox.window.draw(*test);
+
+    toolbox.window.draw(*toolbox.debugButton->getSprite());
+    toolbox.window.draw(*toolbox.testButton1->getSprite());
+    toolbox.window.draw(*toolbox.testButton2->getSprite());
+
+
 }
 
 int launch() {
+    sf::Texture debug_texture;
+    debug_texture.loadFromFile("images/debug.png");
+    sf::Sprite* debug_sprite=new sf::Sprite(debug_texture);
+    toolbox.debugButton->setSprite(debug_sprite);
+
+    sf::Texture new_game_texture;
+    new_game_texture.loadFromFile("images/face_happy.png");
+    sf::Sprite* new_game_sprite=new sf::Sprite(new_game_texture);
+    toolbox.newGameButton->setSprite(new_game_sprite);
+
+    sf::Texture test1_texture;
+    test1_texture.loadFromFile("images/test_1.png");
+    sf::Sprite* test1_sprite=new sf::Sprite(test1_texture);
+    toolbox.testButton1->setSprite(test1_sprite);
+
+    sf::Texture test2_texture;
+    test2_texture.loadFromFile("images/test_2.png");
+    sf::Sprite* test2_sprite=new sf::Sprite(test2_texture);
+    toolbox.testButton2->setSprite(test2_sprite);
+
     while(toolbox.window.isOpen()){
         sf::Event event;
         while(toolbox.window.pollEvent(event)){
@@ -33,6 +59,7 @@ int launch() {
         toolbox.window.clear();
         render();
         toolbox.window.display();
+
     }
     return 0;
 }

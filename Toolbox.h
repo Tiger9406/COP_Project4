@@ -20,7 +20,9 @@ public:
     Button* newGameButton;
     Button* testButton1;
     Button* testButton2;
+
     static Toolbox& getInstance();
+
 private:
     Toolbox(const Toolbox&) = delete;
     Toolbox& operator=(const Toolbox&) = delete;
