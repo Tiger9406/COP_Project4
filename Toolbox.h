@@ -32,6 +32,8 @@ public:
 
     std::vector<sf::Texture*> numbers;
 
+    sf::Texture *digits;
+
 private:
     Toolbox(const Toolbox&);
     Toolbox& operator=(const Toolbox&);

@@ -27,8 +27,8 @@ GameState::GameState(const char* filepath) : playStatus(PLAYING) {
 int GameState::getFlagCount() {
     return flagCount;
 }
-void GameState::incrementFlag(bool up){
-    if(up){
+void GameState::incrementFlag(bool placed){
+    if(placed){
         flagCount++;
     }
     else{

@@ -69,6 +69,11 @@ Toolbox::Toolbox(){
     bombRender.display();
     bombed=new sf::Texture(bombRender.getTexture());
 
+
+    //render numbers
+    digits = new sf::Texture;
+    digits->loadFromFile("images/digits.png");
+
     for(int i = 1; i < 9; i++){
         sf::RenderTexture numRender;
         numRender.create(32,32);

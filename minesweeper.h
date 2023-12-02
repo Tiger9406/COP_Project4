@@ -6,7 +6,7 @@
 #define COP_PROJECT4_MINESWEEPER_H
 
 #include "GameState.h"
-#include "Button.h"
+
 #include "Toolbox.h"
 #include <iostream>
 
@@ -14,6 +14,33 @@ Toolbox& toolbox = Toolbox::getInstance();
 
 bool debugMode=false;
 
+sf::Sprite dig1;
+sf::Sprite dig2;
+sf::Sprite dig3;
+
+void drawDigits(){
+    int displayNum=toolbox.gameState->getMineCount()-toolbox.gameState->getFlagCount();
+    sf::IntRect textureRect1;
+    if(displayNum<0){
+        textureRect1=sf::IntRect(210, 0, 21, 32);
+        displayNum=-(displayNum%100);
+    }
+    else{
+        textureRect1=sf::IntRect((displayNum/100)*21, 0, 21, 32);
+    }
+    dig1.setTextureRect(textureRect1);
+
+    sf::IntRect textureRect2((displayNum/10)*21, 0, 21, 32);
+    dig2.setTextureRect(textureRect2);
+    displayNum=displayNum%10;
+
+    sf::IntRect textureRect3((displayNum)*21, 0, 21, 32);
+    dig3.setTextureRect(textureRect3);
+
+    toolbox.window.draw(dig1);
+    toolbox.window.draw(dig2);
+    toolbox.window.draw(dig3);
+}
 
 void render() {
     toolbox.window.draw(*toolbox.debugButton->getSprite());
@@ -22,6 +49,8 @@ void render() {
     toolbox.window.draw(*toolbox.testButton2->getSprite());
 
     toolbox.gameState->draw();
+
+    drawDigits();
 }
 
 void restart() {
@@ -62,6 +91,15 @@ void handleMouseClick(sf::Event &event){
 int launch() {
 
     restart();
+
+    dig1.setTexture(*toolbox.digits);
+    dig1.setPosition(100.0f, 530.0f);
+
+    dig2.setTexture(*toolbox.digits);
+    dig2.setPosition(121.0f, 530.0f);
+
+    dig3.setTexture(*toolbox.digits);
+    dig3.setPosition(142.0f, 530.0f);
 
     while(toolbox.window.isOpen()){
         sf::Event event;
