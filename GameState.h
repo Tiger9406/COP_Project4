@@ -22,7 +22,7 @@ public:
     PlayStatus getPlayStatus();
     void setPlayStatus(PlayStatus _status);
 
-
+    void setTileMineStatus();
     void onClick(sf::Vector2f& click_pos, bool left);
     void draw();
     void incrementFlag(bool up);

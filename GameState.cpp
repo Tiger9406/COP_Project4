@@ -11,14 +11,18 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(
     for(int i = 0; i < dimensions.y; i++){
         for(int j = 0; j < dimensions.x; j++){
             sf::Vector2f vec(static_cast<float>(j*32), static_cast<float>(i*32));
-            Tile* tile= new Tile(vec);
-            tiles.push_back(*tile);
-            if(i==1){
-                tile->mine=true;
+            Tile tile= Tile(vec);
+            if(i==1) {
+                tile.mine = 9;
             }
+            tiles.push_back(tile);
+
         }
     }
+    setTileMineStatus();
 }
+
+
 
 GameState::GameState(const char* filepath) : playStatus(PLAYING) {
     // given board
@@ -56,6 +60,75 @@ GameState::PlayStatus GameState::getPlayStatus() {
 
 void GameState::setPlayStatus(PlayStatus _status) {
     playStatus = _status;
+}
+
+void GameState::setTileMineStatus(){
+    int current=0;
+    for(Tile &t : tiles){
+        std::array<Tile*, 8> *neighbors = new std::array<Tile*, 8>;
+        sf::Vector2f pos = t.getLocation();
+        if(pos.x-1<0){
+            (*neighbors)[0]=nullptr;
+            (*neighbors)[1]=nullptr;
+            (*neighbors)[2]=nullptr;
+        }
+        else if(pos.x+33>dimensions.x*32){
+            (*neighbors)[5]=nullptr;
+            (*neighbors)[6]=nullptr;
+            (*neighbors)[7]=nullptr;
+        }
+        if(pos.y-1<0){
+            (*neighbors)[0]=nullptr;
+            (*neighbors)[3]=nullptr;
+            (*neighbors)[5]=nullptr;
+        }
+        else if(pos.y+33>dimensions.y*32){
+            (*neighbors)[2]=nullptr;
+            (*neighbors)[4]=nullptr;
+            (*neighbors)[7]=nullptr;
+        }
+        for(int i =0; i < 8; i++){
+            if((*neighbors)[i]!=nullptr){
+                if(i==0){
+                    (*neighbors)[i]=&tiles[current-dimensions.x-1];
+                }
+                else if(i==1){
+                    (*neighbors)[i]=&tiles[current-1];
+                }
+                else if(i==2){
+                    (*neighbors)[i]=&tiles[current+dimensions.x-1];
+                }
+                else if(i==3){
+                    (*neighbors)[i]=&tiles[current-dimensions.x];
+                }
+                else if(i==4){
+                    (*neighbors)[i]=&tiles[current+dimensions.x];
+                }
+                else if(i==5){
+                    (*neighbors)[i]=&tiles[current-dimensions.x+1];
+                }
+                else if(i==6){
+                    (*neighbors)[i]=&tiles[current+1];
+                }
+                else if(i==7){
+                    (*neighbors)[i]=&tiles[current+dimensions.x+1];
+                }
+            }
+        }
+        t.setNeighbors((*neighbors));
+        delete neighbors;
+
+        if(t.mine!=9){
+            int mineCount=0;
+            for(Tile *n : t.getNeighbors()){
+                if(n!= nullptr && n->mine==9){
+                    mineCount++;
+                }
+            }
+            t.mine=mineCount;
+        }
+        current++;
+    }
 }
 
 void GameState::draw(){

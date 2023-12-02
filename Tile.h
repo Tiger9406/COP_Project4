@@ -27,7 +27,8 @@ public:
     void onClickRight();
     void draw();
     sf::Sprite sprite;
-    bool mine;
+    int mine=0; //9 for mine, 0-8 for neighboring
+
 protected:
     void revealNeighbors();
 private:

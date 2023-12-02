@@ -82,7 +82,7 @@ Toolbox::Toolbox(){
         numRender.draw(sf::Sprite(*revealed));
         numRender.draw(sf::Sprite(num));
         numRender.display();
-        sf::Texture *push_num=new sf::Texture(bombRender.getTexture());
+        sf::Texture *push_num=new sf::Texture(numRender.getTexture());
         numbers.push_back(push_num);
     }
 
