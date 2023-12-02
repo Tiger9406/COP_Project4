@@ -6,7 +6,7 @@
 #include "Toolbox.h"
 
 
-Tile::Tile(sf::Vector2f _position) : position(_position), currentState(HIDDEN) {
+Tile::Tile(sf::Vector2f _position) : position(_position), currentState(HIDDEN), mine(false) {
     sprite.setPosition(position.x, position.y);
 }
 
@@ -25,6 +25,12 @@ std::array<Tile*, 8>& Tile::getNeighbors() {
 void Tile::setState(State _state) {
     currentState = _state;
     // maybe more actions later
+    if(currentState==REVEALED){
+        //action explode
+    }
+    else if(currentState==EXPLODED){
+
+    }
 }
 
 void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
@@ -73,7 +79,6 @@ void Tile::revealNeighbors() {
     for(Tile* neighbor : neighbors){
         if(neighbor && neighbor->getState()==HIDDEN){
             neighbor->setState(REVEALED);
-            neighbor->draw();
         }
     }
 }

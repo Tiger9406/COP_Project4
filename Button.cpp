@@ -30,10 +30,6 @@ void Button::onClick(){
     onClickCallback();
 }
 
-void Button::draw() {
-    Toolbox &toolbox = Toolbox::getInstance();
-    toolbox.window.draw(*sprite);
-}
 
 bool Button::clicked(sf::Vector2f& click_pos, bool left){
     if(sprite->getGlobalBounds().contains(click_pos) && left){

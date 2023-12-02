@@ -16,10 +16,10 @@ bool debugMode=false;
 
 
 void render() {
-    toolbox.debugButton->draw();
-    toolbox.newGameButton->draw();
-    toolbox.testButton1->draw();
-    toolbox.testButton2->draw();
+    toolbox.window.draw(*toolbox.debugButton->getSprite());
+    toolbox.window.draw(*toolbox.newGameButton->getSprite());
+    toolbox.window.draw(*toolbox.testButton1->getSprite());
+    toolbox.window.draw(*toolbox.testButton2->getSprite());
 
     toolbox.gameState->draw();
 }

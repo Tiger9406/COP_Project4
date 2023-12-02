@@ -13,6 +13,9 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(
             sf::Vector2f vec(static_cast<float>(j*32), static_cast<float>(i*32));
             Tile* tile= new Tile(vec);
             tiles.push_back(*tile);
+            if(i==1){
+                tile->mine=true;
+            }
         }
     }
 }
@@ -64,9 +67,6 @@ void GameState::draw(){
 void GameState::onClick(sf::Vector2f& click_pos, bool left){
     int x=static_cast<int>(click_pos.x/32.0f);
     int y=static_cast<int>(click_pos.y/32.0f);
-    std::cout<<click_pos.x << " "<<click_pos.y<<std::endl;
-
-    std::cout<<x<< " "<<y<<std::endl;
     Tile* clicked_tile=getTile(x, y);
     if(clicked_tile && left){
         clicked_tile->onClickLeft();

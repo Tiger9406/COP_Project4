@@ -26,8 +26,8 @@ public:
     void onClickLeft();
     void onClickRight();
     void draw();
-    sf::Texture state;
     sf::Sprite sprite;
+    bool mine;
 protected:
     void revealNeighbors();
 private:

@@ -55,7 +55,7 @@ Toolbox::Toolbox(){
     flagRender.create(32,32);
     sf::Texture flag;
     flag.loadFromFile("images/flag.png");
-    flagRender.draw(sf::Sprite(*revealed));
+    flagRender.draw(sf::Sprite(*hidden));
     flagRender.draw(sf::Sprite(flag));
     flagRender.display();
     flagged= new sf::Texture(flagRender.getTexture());
