@@ -4,8 +4,6 @@
 
 #include "GameState.h"
 #include <SFML/Graphics.hpp>
-#include "Toolbox.h"
-#include <iostream>
 
 GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(_dimensions), numberOfMines(_numberOfMines), flagCount(0), playStatus(PLAYING) {
     for(int i = 0; i < dimensions.y; i++){
@@ -16,7 +14,6 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(
                 tile.mine = 9;
             }
             tiles.push_back(tile);
-
         }
     }
     setTileMineStatus();

@@ -25,7 +25,7 @@ public:
     void setNeighbors(std::array<Tile*, 8> _neighbors);
     void onClickLeft();
     void onClickRight();
-    void draw();
+    void draw() const;
     sf::Sprite sprite;
     int mine=0; //9 for mine, 0-8 for neighboring
 
