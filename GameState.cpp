@@ -8,17 +8,18 @@
 #include <algorithm>
 #include <random>
 
+
 GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(_dimensions), numberOfMines(_numberOfMines), flagCount(0), playStatus(PLAYING) {
+    tilesLeft=static_cast<int>(dimensions.x*dimensions.y);
     for(int i = 0; i < dimensions.y; i++){
         for(int j = 0; j < dimensions.x; j++){
             sf::Vector2f vec(static_cast<float>(j*32), static_cast<float>(i*32));
             Tile tile= Tile(vec);
-//            if(i==1) {
-//                tile.mine = 9;
-//            }
             tiles.push_back(tile);
         }
     }
+
+
     std::vector<Tile*> copied_tiles;
     copied_tiles.reserve(tiles.size());
     for(auto &t:tiles){
@@ -149,13 +150,16 @@ void GameState::draw(){
 }
 
 void GameState::onClick(sf::Vector2f& click_pos, bool left){
-    int x=static_cast<int>(click_pos.x/32.0f);
-    int y=static_cast<int>(click_pos.y/32.0f);
-    Tile* clicked_tile=getTile(x, y);
-    if(clicked_tile && left){
-        clicked_tile->onClickLeft();
+    if(playStatus==PLAYING){
+        int x=static_cast<int>(click_pos.x/32.0f);
+        int y=static_cast<int>(click_pos.y/32.0f);
+        Tile* clicked_tile=getTile(x, y);
+        if(clicked_tile && left){
+            clicked_tile->onClickLeft();
+        }
+        else if(clicked_tile && !left){
+            clicked_tile->onClickRight();
+        }
     }
-    else if(clicked_tile && !left){
-        clicked_tile->onClickRight();
-    }
+
 }

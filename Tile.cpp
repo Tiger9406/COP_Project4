@@ -26,25 +26,32 @@ std::array<Tile*, 8>& Tile::getNeighbors() {
 
 void Tile::setState(State _state) {
     Toolbox& toolbox=Toolbox::getInstance();
-    // maybe more actions later
-    if(currentState==EXPLODED && _state==EXPLODED){
-        //debug mode:: explode alr explode again: lose game revealed mine
+
+    currentState = _state;
+    if(currentState==EXPLODED){
+        sprite.setTexture(*toolbox.bombed);
+        toolbox.gameState->setPlayStatus(GameState::LOSS);
+    }
+    else if(currentState==HIDDEN){
+        sprite.setTexture(*toolbox.hidden);
+    }
+    else if(mine==0){
+        sprite.setTexture(*toolbox.revealed);
+        toolbox.gameState->tilesLeft--;
+        if(toolbox.gameState->tilesLeft==toolbox.gameState->getMineCount()){
+            toolbox.gameState->setPlayStatus(GameState::WIN);
+            toolbox.newGameButton->setSprite(toolbox.win_sprite);
+        }
     }
     else{
-        currentState = _state;
-        if(currentState==EXPLODED){
-            sprite.setTexture(*toolbox.bombed);
-        }
-        else if(currentState==HIDDEN){
-            sprite.setTexture(*toolbox.hidden);
-        }
-        else if(mine==0){
-            sprite.setTexture(*toolbox.revealed);
-        }
-        else{
-            sprite.setTexture(*toolbox.numbers[mine-1]);
+        sprite.setTexture(*toolbox.numbers[mine-1]);
+        toolbox.gameState->tilesLeft--;
+        if(toolbox.gameState->tilesLeft==toolbox.gameState->getMineCount()){
+            toolbox.gameState->setPlayStatus(GameState::WIN);
+            toolbox.newGameButton->setSprite(toolbox.win_sprite);
         }
     }
+
 }
 
 void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
@@ -94,9 +101,11 @@ void Tile::revealNeighbors() {
                 neighbor->setState(EXPLODED);
             }
             else{
-                neighbor->setState(REVEALED);
-                if(neighbor->mine==0){
-                    neighbor->revealNeighbors();
+                if(neighbor->getState()!=REVEALED){
+                    neighbor->setState(REVEALED);
+                    if(neighbor->mine==0){
+                        neighbor->revealNeighbors();
+                    }
                 }
             }
         }

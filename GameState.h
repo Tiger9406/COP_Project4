@@ -13,7 +13,7 @@ class GameState {
 public:
     enum PlayStatus { WIN, LOSS, PLAYING };
 
-    GameState(sf::Vector2i _dimensions = sf::Vector2i(25, 16), int _numberOfMines = 50);
+    GameState(sf::Vector2i _dimensions = sf::Vector2i(25, 16), int _numberOfMines = 1);
     GameState(const char* filepath);
 
     int getFlagCount();
@@ -26,6 +26,7 @@ public:
     void onClick(sf::Vector2f& click_pos, bool left);
     void draw();
     void incrementFlag(bool up);
+    int tilesLeft;
 private:
     sf::Vector2i dimensions;
     int numberOfMines;

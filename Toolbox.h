@@ -18,6 +18,12 @@ public:
     sf::RenderWindow window;
     GameState* gameState;
 
+    sf::Texture *face_happy;
+
+    sf::Sprite *happy_sprite;
+    sf::Sprite *lose_sprite;
+    sf::Sprite *win_sprite;
+
     Button* debugButton;
     Button* newGameButton;
     Button* testButton1;

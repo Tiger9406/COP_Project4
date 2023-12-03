@@ -16,11 +16,20 @@ Toolbox::Toolbox(){
 
     //make universally accessible buttons
 
+
     newGameButton = new Button(sf::Vector2f(400.0f, 530.0f), [this](){this->gameState=new GameState();});
-    sf::Texture *new_game_texture=new sf::Texture;
-    new_game_texture->loadFromFile("images/face_happy.png");
-    sf::Sprite* new_game_sprite=new sf::Sprite(*new_game_texture);
-    newGameButton->setSprite(new_game_sprite);
+    sf::Texture *face_happy=new sf::Texture;
+    face_happy->loadFromFile("images/face_happy.png");
+    sf::Sprite* happy_sprite=new sf::Sprite(*face_happy);
+    newGameButton->setSprite(happy_sprite);
+
+    sf::Texture *face_win = new sf::Texture;
+    face_win->loadFromFile("images/face_win.png");
+    win_sprite=new sf::Sprite(*face_win);
+
+    sf::Texture *face_loss = new sf::Texture;
+    face_loss->loadFromFile("images/face_lose.png");
+    lose_sprite=new sf::Sprite(*face_loss);
 
     debugButton = new Button(sf::Vector2f(590.0f, 530.0f), [](){std::cout<<"hello";});
     sf::Texture *debug_texture=new sf::Texture;
