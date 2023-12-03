@@ -4,17 +4,31 @@
 
 #include "GameState.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <algorithm>
+#include <random>
 
 GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(_dimensions), numberOfMines(_numberOfMines), flagCount(0), playStatus(PLAYING) {
     for(int i = 0; i < dimensions.y; i++){
         for(int j = 0; j < dimensions.x; j++){
             sf::Vector2f vec(static_cast<float>(j*32), static_cast<float>(i*32));
             Tile tile= Tile(vec);
-            if(i==1) {
-                tile.mine = 9;
-            }
+//            if(i==1) {
+//                tile.mine = 9;
+//            }
             tiles.push_back(tile);
         }
+    }
+    std::vector<Tile*> copied_tiles;
+    copied_tiles.reserve(tiles.size());
+    for(auto &t:tiles){
+        copied_tiles.push_back(&t);
+    }
+    std::random_device rand;
+    std::mt19937 g(rand());
+    std::shuffle(copied_tiles.begin(), copied_tiles.end(), g);
+    for(int i = 0; i < numberOfMines; i++){
+        copied_tiles[i]->mine=9;
     }
     setTileMineStatus();
 }
