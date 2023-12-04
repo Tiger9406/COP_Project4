@@ -12,15 +12,14 @@ Toolbox& Toolbox::getInstance() {
 }
 
 
+
 Toolbox::Toolbox(){
-
     //make universally accessible buttons
-
 
     newGameButton = new Button(sf::Vector2f(400.0f, 530.0f), [this](){this->gameState=new GameState();});
     sf::Texture *face_happy=new sf::Texture;
     face_happy->loadFromFile("images/face_happy.png");
-    sf::Sprite* happy_sprite=new sf::Sprite(*face_happy);
+    happy_sprite=new sf::Sprite(*face_happy);
     newGameButton->setSprite(happy_sprite);
 
     sf::Texture *face_win = new sf::Texture;
@@ -31,19 +30,19 @@ Toolbox::Toolbox(){
     face_loss->loadFromFile("images/face_lose.png");
     lose_sprite=new sf::Sprite(*face_loss);
 
-    debugButton = new Button(sf::Vector2f(590.0f, 530.0f), [](){std::cout<<"hello";});
+    debugButton = new Button(sf::Vector2f(590.0f, 530.0f), [](){});
     sf::Texture *debug_texture=new sf::Texture;
     debug_texture->loadFromFile("images/debug.png");
     sf::Sprite *debug_sprite=new sf::Sprite(*debug_texture);
     debugButton->setSprite(debug_sprite);
 
-    testButton1 = new Button(sf::Vector2f(660.0f, 530.0f), [this](){this->gameState=new GameState();});
+    testButton1 = new Button(sf::Vector2f(660.0f, 530.0f), [this](){this->gameState=new GameState("boards/testboard1.brd");});
     sf::Texture *test1_texture= new sf::Texture;
     test1_texture->loadFromFile("images/test_1.png");
     sf::Sprite* test1_sprite=new sf::Sprite(*test1_texture);
     testButton1->setSprite(test1_sprite);
 
-    testButton2 = new Button(sf::Vector2f(730.0f, 530.0f), [this](){this->gameState=new GameState();});
+    testButton2 = new Button(sf::Vector2f(730.0f, 530.0f), [this](){this->gameState=new GameState("boards/testboard2.brd");});
     sf::Texture *test2_texture=new sf::Texture;
     test2_texture->loadFromFile("images/test_2.png");
     sf::Sprite* test2_sprite=new sf::Sprite(*test2_texture);
@@ -78,6 +77,13 @@ Toolbox::Toolbox(){
     bombRender.display();
     bombed=new sf::Texture(bombRender.getTexture());
 
+    sf::RenderTexture debugBombRender;
+    debugBombRender.create(32,32);
+    debugBombRender.draw(sf::Sprite(*hidden));
+    debugBombRender.draw(sf::Sprite(bomb));
+    debugBombRender.display();
+    debug_bomb=new sf::Texture(debugBombRender.getTexture());
+
 
     //render numbers
     digits = new sf::Texture;
@@ -94,7 +100,6 @@ Toolbox::Toolbox(){
         sf::Texture *push_num=new sf::Texture(numRender.getTexture());
         numbers.push_back(push_num);
     }
-
 }
 
 

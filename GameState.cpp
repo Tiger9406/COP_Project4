@@ -7,6 +7,9 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 
 GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(_dimensions), numberOfMines(_numberOfMines), flagCount(0), playStatus(PLAYING) {
@@ -18,7 +21,6 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(
             tiles.push_back(tile);
         }
     }
-
 
     std::vector<Tile*> copied_tiles;
     copied_tiles.reserve(tiles.size());
@@ -36,8 +38,42 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(
 
 
 
-GameState::GameState(const char* filepath) : playStatus(PLAYING) {
-    // given board
+
+GameState::GameState(const char* filepath) : playStatus(PLAYING), flagCount(0) {
+    numberOfMines=0;
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filepath << std::endl;
+        return;
+    }
+    std::string line;
+    int y=0;
+    while (std::getline(file, line)) {
+        if(y==0){
+            dimensions.x=line.length();
+        }
+        std::istringstream iss(line);
+        for (int i = 0; i < line.length(); i++) {
+            sf::Vector2f vec(static_cast<float>(i*32), static_cast<float>(y*32));
+            Tile tile= Tile(vec);
+            if(line[i]=='1'){
+                tile.mine=9;
+                numberOfMines++;
+            }
+            tiles.push_back(tile);
+        }
+        y++;
+    }
+    dimensions.y=y;
+    tilesLeft=dimensions.x*y;
+    setTileMineStatus();
+}
+void GameState::toggleMine(){
+    for(Tile &t : tiles){
+        if(t.mine==9){
+            t.setState(Tile::HIDDEN);
+        }
+    }
 }
 
 int GameState::getFlagCount() {

@@ -18,8 +18,6 @@ public:
     sf::RenderWindow window;
     GameState* gameState;
 
-    sf::Texture *face_happy;
-
     sf::Sprite *happy_sprite;
     sf::Sprite *lose_sprite;
     sf::Sprite *win_sprite;
@@ -35,6 +33,9 @@ public:
     sf::Texture *revealed;
     sf::Texture *flagged;
     sf::Texture *bombed;
+    sf::Texture *debug_bomb;
+
+    bool debug;
 
     std::vector<sf::Texture*> numbers;
 

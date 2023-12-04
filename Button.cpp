@@ -21,6 +21,9 @@ sf::Sprite* Button::getSprite() {
 }
 
 void Button::setSprite(sf::Sprite* _sprite){
+//    delete sprite;
+//    sf::Sprite *sprite_copy = new sf::Sprite(*_sprite);
+//    sprite=sprite_copy;
     sprite=_sprite;
     sprite->setPosition(position.x, position.y);
 }

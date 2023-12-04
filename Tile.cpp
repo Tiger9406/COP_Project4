@@ -23,17 +23,21 @@ std::array<Tile*, 8>& Tile::getNeighbors() {
     return neighbors;
 }
 
-
 void Tile::setState(State _state) {
     Toolbox& toolbox=Toolbox::getInstance();
-
     currentState = _state;
     if(currentState==EXPLODED){
+        toolbox.debug=true;
+        toolbox.gameState->toggleMine();
         sprite.setTexture(*toolbox.bombed);
         toolbox.gameState->setPlayStatus(GameState::LOSS);
+        toolbox.newGameButton->setSprite(toolbox.lose_sprite);
     }
     else if(currentState==HIDDEN){
         sprite.setTexture(*toolbox.hidden);
+        if(toolbox.debug && mine==9){
+            sprite.setTexture(*toolbox.debug_bomb);
+        }
     }
     else if(mine==0){
         sprite.setTexture(*toolbox.revealed);
@@ -51,8 +55,8 @@ void Tile::setState(State _state) {
             toolbox.newGameButton->setSprite(toolbox.win_sprite);
         }
     }
-
 }
+
 
 void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
     neighbors = _neighbors;
@@ -65,6 +69,7 @@ void Tile::onClickLeft() {
             setState(EXPLODED);
         }
         else if(mine==0){
+            setState(REVEALED);
             revealNeighbors();
         }
         else{

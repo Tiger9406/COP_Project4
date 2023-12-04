@@ -27,6 +27,7 @@ void drawDigits(){
     }
     else{
         textureRect1=sf::IntRect((displayNum/100)*21, 0, 21, 32);
+        displayNum=displayNum%100;
     }
     dig1.setTextureRect(textureRect1);
 
@@ -55,15 +56,17 @@ void render() {
 
 void restart() {
     toolbox.gameState= new GameState();
+
 }
 
 
 void toggleDebugMode() {
-    debugMode = !debugMode;
+    toolbox.debug=!toolbox.debug;
+    toolbox.gameState->toggleMine();
 }
 
 bool getDebugMode() {
-    return debugMode;
+    return toolbox.debug;
 }
 
 void handleMouseClick(sf::Event &event){
@@ -71,15 +74,22 @@ void handleMouseClick(sf::Event &event){
     bool left= event.mouseButton.button==sf::Mouse::Left;
     if(mouse_pos.y>530.0f){
         if(toolbox.newGameButton->clicked(mouse_pos, left)){
+            toolbox.newGameButton->setSprite(toolbox.happy_sprite);
+            toolbox.debug=false;
             return;
         }
         else if(toolbox.debugButton->clicked(mouse_pos, left)){
+            toggleDebugMode();
             return;
         }
         else if(toolbox.testButton1->clicked(mouse_pos, left)){
+            toolbox.newGameButton->setSprite(toolbox.happy_sprite);
+            toolbox.debug=false;
             return;
         }
         else if(toolbox.testButton2->clicked(mouse_pos, left)){
+            toolbox.newGameButton->setSprite(toolbox.happy_sprite);
+            toolbox.debug=false;
             return;
         }
     }
