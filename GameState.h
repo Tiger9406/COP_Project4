@@ -12,15 +12,17 @@
 
 class GameState {
 public:
-    enum PlayStatus { WIN, LOSS, PLAYING };
-
+    enum PlayStatus { WIN, LOSS, PLAYING }; //the three current statuses
+    //default constructor
     GameState(sf::Vector2i _dimensions = sf::Vector2i(25, 16), int _numberOfMines = 50);
+    //constructor given board
+    //getters
     GameState(const char* filepath);
-
     int getFlagCount();
     int getMineCount();
     Tile* getTile(int x, int y);
     PlayStatus getPlayStatus();
+    //set playstatus
     void setPlayStatus(PlayStatus _status);
 
 private:
@@ -29,13 +31,8 @@ private:
     int flagCount;
     PlayStatus playStatus;
     std::vector<Tile*> tiles;
-    void setTileMineStatus();
-    std::vector<int> mines;
-    ~GameState(){
-        for(Tile *t:tiles){
-            delete t;
-        }
-    }
+    //private methods/vars to track or lessen complexisty
+    void setTileMineStatus(); //sets neighbors: quite difficult the way I did it
 };
 
 

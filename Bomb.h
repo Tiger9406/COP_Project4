@@ -10,6 +10,7 @@
 
 class Bomb : public Tile{
 public:
+    //all mirror Tile
     Bomb(sf::Vector2f position);
     void setState(State _state) override;
     void draw() const override;
@@ -17,6 +18,7 @@ public:
     void onClickRight() override;
     State getState() override;
 private:
+    //only needs to work with sprite and state
     sf::Sprite sprite;
     State currentState;
 };

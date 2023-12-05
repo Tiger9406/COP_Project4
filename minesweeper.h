@@ -10,15 +10,19 @@
 #include "Toolbox.h"
 #include <iostream>
 
+//used everywhere
 Toolbox& toolbox = Toolbox::getInstance();
 
+//digits display
 sf::Sprite dig1;
 sf::Sprite dig2;
 sf::Sprite dig3;
 
+//function to draw digits
 void drawDigits(){
     int displayNum=toolbox.gameState->getMineCount()-toolbox.gameState->getFlagCount();
     sf::IntRect textureRect1;
+    //sets rects to display only one digit from 0-9
     if(displayNum<0){
         textureRect1=sf::IntRect(210, 0, 21, 32);
         displayNum=-(displayNum%100);
@@ -41,6 +45,7 @@ void drawDigits(){
     toolbox.window.draw(dig3);
 }
 
+//draws everything
 void render() {
     toolbox.window.draw(*toolbox.debugButton->getSprite());
     toolbox.window.draw(*toolbox.newGameButton->getSprite());
@@ -48,6 +53,7 @@ void render() {
     toolbox.window.draw(*toolbox.testButton2->getSprite());
     toolbox.window.draw(*toolbox.testButton3->getSprite());
 
+    //draws tiles
     int y = 0;
     int x = 0;
     int total=0;
@@ -66,18 +72,22 @@ void render() {
         y++;
     }
 
+    //checks every refresh to see if won
     if(total-toolbox.gameState->getMineCount()==revealed){
         toolbox.gameState->setPlayStatus(GameState::WIN);
         toolbox.newGameButton->setSprite(toolbox.win_sprite);
     }
+    //calls drawdigits
     drawDigits();
 }
 
+
+//restart game
 void restart() {
     toolbox.gameState=new GameState();
 }
 
-
+//toggles debug mode: if tile is a bomb, sets state again to update to new debug texture
 void toggleDebugMode() {
     toolbox.debug=!toolbox.debug;
     int y = 0;
@@ -96,10 +106,11 @@ void toggleDebugMode() {
     }
 }
 
-
+//handle clicks
 void handleMouseClick(sf::Event &event){
     sf::Vector2f mouse_pos=toolbox.window.mapPixelToCoords(sf::Mouse::getPosition(toolbox.window));
     bool left= event.mouseButton.button==sf::Mouse::Left;
+    //if clicked below the tiles
     if(mouse_pos.y>530.0f){
         if(toolbox.newGameButton->getSprite()->getGlobalBounds().contains(mouse_pos) && left){
             toolbox.newGameButton->onClick();
@@ -130,17 +141,20 @@ void handleMouseClick(sf::Event &event){
             return;
         }
     }
-    else{
+    else{ //if clicked a tile
         if(toolbox.gameState->getPlayStatus()==GameState::PLAYING){
             int x=static_cast<int>(mouse_pos.x/32.0f);
             int y=static_cast<int>(mouse_pos.y/32.0f);
+            //gets the clicked tile
             Tile* clicked_tile=toolbox.gameState->getTile(x, y);
             if(clicked_tile && left){
                 clicked_tile->onClickLeft();
+                //checks after every click if lost
                 if(toolbox.gameState->getPlayStatus()==GameState::LOSS){
                     toolbox.debug=true;
                     int y2 = 0;
                     int x2 = 0;
+                    //if yes, bomb other than the exploded one reveals to bomb on hidden tile
                     while(toolbox.gameState->getTile(x2,y2)!= nullptr) {
                         while (toolbox.gameState->getTile(x2, y2) != nullptr) {
                             Tile *t = toolbox.gameState->getTile(x2, y2);
@@ -155,7 +169,7 @@ void handleMouseClick(sf::Event &event){
                     }
                 }
             }
-            else if(clicked_tile){
+            else if(clicked_tile){ //if right click in tiles
                 clicked_tile->onClickRight();
             }
         }
@@ -164,6 +178,7 @@ void handleMouseClick(sf::Event &event){
 
 int launch() {
 
+    //starts new game
     restart();
 
     dig1.setTexture(*toolbox.digits);
@@ -175,6 +190,7 @@ int launch() {
     dig3.setTexture(*toolbox.digits);
     dig3.setPosition(142.0f, 530.0f);
 
+    //loads windows
     while(toolbox.window.isOpen()){
         sf::Event event;
         while(toolbox.window.pollEvent(event)){
