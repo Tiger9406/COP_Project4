@@ -16,7 +16,11 @@ Toolbox& Toolbox::getInstance() {
 Toolbox::Toolbox(){
     //make universally accessible buttons
 
-    newGameButton = new Button(sf::Vector2f(400.0f, 530.0f), [this](){this->gameState=new GameState();});
+    tilesLeft=0;
+
+    gameState = nullptr;
+
+    newGameButton = new Button(sf::Vector2f(400.0f, 530.0f), [this](){this->newGame("");});
     sf::Texture *face_happy=new sf::Texture;
     face_happy->loadFromFile("images/face_happy.png");
     happy_sprite=new sf::Sprite(*face_happy);
@@ -30,28 +34,34 @@ Toolbox::Toolbox(){
     face_loss->loadFromFile("images/face_lose.png");
     lose_sprite=new sf::Sprite(*face_loss);
 
-    debugButton = new Button(sf::Vector2f(590.0f, 530.0f), [](){});
+    debugButton = new Button(sf::Vector2f(500.0f, 530.0f), [](){});
     sf::Texture *debug_texture=new sf::Texture;
     debug_texture->loadFromFile("images/debug.png");
     sf::Sprite *debug_sprite=new sf::Sprite(*debug_texture);
     debugButton->setSprite(debug_sprite);
 
-    testButton1 = new Button(sf::Vector2f(660.0f, 530.0f), [this](){this->gameState=new GameState("boards/testboard1.brd");});
+    testButton1 = new Button(sf::Vector2f(570.0f, 530.0f), [this](){this->newGame("boards/testboard1.brd");});
     sf::Texture *test1_texture= new sf::Texture;
     test1_texture->loadFromFile("images/test_1.png");
     sf::Sprite* test1_sprite=new sf::Sprite(*test1_texture);
     testButton1->setSprite(test1_sprite);
 
-    testButton2 = new Button(sf::Vector2f(730.0f, 530.0f), [this](){this->gameState=new GameState("boards/testboard2.brd");});
+    testButton2 = new Button(sf::Vector2f(640.0f, 530.0f), [this](){this->newGame("boards/testboard2.brd");});
     sf::Texture *test2_texture=new sf::Texture;
     test2_texture->loadFromFile("images/test_2.png");
     sf::Sprite* test2_sprite=new sf::Sprite(*test2_texture);
     testButton2->setSprite(test2_sprite);
 
+    testButton3 = new Button(sf::Vector2f(710.0f, 530.0f), [this](){this->newGame("boards/testboard3.brd");});
+    sf::Texture *test3_texture=new sf::Texture;
+    test3_texture->loadFromFile("images/Test_3.png");
+    sf::Sprite* test3_sprite=new sf::Sprite(*test3_texture);
+    testButton3->setSprite(test3_sprite);
+
     // Initialize the SFML window
     window.create(sf::VideoMode(800, 600), "SFML Sprite Example");
 
-    gameState = nullptr;
+
 
     //make universally accessible textures
     hidden= new sf::Texture;
@@ -100,9 +110,30 @@ Toolbox::Toolbox(){
         sf::Texture *push_num=new sf::Texture(numRender.getTexture());
         numbers.push_back(push_num);
     }
+
+
 }
 
+void Toolbox::newGame(const char* filepath){
+    int y = 0;
+    int x = 0;
+    while(gameState->getTile(x,y)!= nullptr) {
+        while (gameState->getTile(x, y) != nullptr) {
+            Tile *t = gameState->getTile(x, y);
+            delete t;
+            x++;
+        }
+        x=0;
+        y++;
+    }
 
+    if(filepath == nullptr || *filepath == '\0'){
+        gameState=new GameState();
+    }
+    else{
+        gameState=new GameState(filepath);
+    }
+}
 
 Toolbox::~Toolbox() {
 

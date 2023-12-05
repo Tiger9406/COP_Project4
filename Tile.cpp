@@ -4,11 +4,14 @@
 
 #include "Tile.h"
 #include "Toolbox.h"
+#include "Bomb.h"
 
 
 Tile::Tile(sf::Vector2f _position) : position(_position){
+    Toolbox &toolbox = Toolbox::getInstance();
     sprite.setPosition(position.x, position.y);
-    setState(HIDDEN);
+    currentState=HIDDEN;
+    sprite.setTexture(*toolbox.hidden);
 }
 
 sf::Vector2f Tile::getLocation() {
@@ -26,55 +29,32 @@ std::array<Tile*, 8>& Tile::getNeighbors() {
 void Tile::setState(State _state) {
     Toolbox& toolbox=Toolbox::getInstance();
     currentState = _state;
-    if(currentState==EXPLODED){
-        toolbox.debug=true;
-        toolbox.gameState->toggleMine();
-        sprite.setTexture(*toolbox.bombed);
-        toolbox.gameState->setPlayStatus(GameState::LOSS);
-        toolbox.newGameButton->setSprite(toolbox.lose_sprite);
-    }
-    else if(currentState==HIDDEN){
-        sprite.setTexture(*toolbox.hidden);
-        if(toolbox.debug && mine==9){
-            sprite.setTexture(*toolbox.debug_bomb);
-        }
-    }
-    else if(mine==0){
+    if(mine==0){
         sprite.setTexture(*toolbox.revealed);
-        toolbox.gameState->tilesLeft--;
-        if(toolbox.gameState->tilesLeft==toolbox.gameState->getMineCount()){
-            toolbox.gameState->setPlayStatus(GameState::WIN);
-            toolbox.newGameButton->setSprite(toolbox.win_sprite);
-        }
+        revealNeighbors();
     }
     else{
         sprite.setTexture(*toolbox.numbers[mine-1]);
-        toolbox.gameState->tilesLeft--;
-        if(toolbox.gameState->tilesLeft==toolbox.gameState->getMineCount()){
-            toolbox.gameState->setPlayStatus(GameState::WIN);
-            toolbox.newGameButton->setSprite(toolbox.win_sprite);
-        }
     }
+
 }
 
 
 void Tile::setNeighbors(std::array<Tile*, 8> _neighbors) {
-    neighbors = _neighbors;
+    for(int i = 0; i < 8; i++){
+        neighbors[i]=_neighbors[i];
+    }
+    for(Tile* t : neighbors){
+        Bomb *derived=dynamic_cast<Bomb*>(t);
+        if(derived != nullptr) {
+            mine++;
+        }
+    }
 }
 
 void Tile::onClickLeft() {
-    Toolbox& toolbox=Toolbox::getInstance();
     if (currentState == HIDDEN) {
-        if(mine==9){
-            setState(EXPLODED);
-        }
-        else if(mine==0){
-            setState(REVEALED);
-            revealNeighbors();
-        }
-        else{
-            setState(REVEALED);
-        }
+        setState(REVEALED);
     }
     else if(currentState==REVEALED){
         revealNeighbors();
@@ -86,11 +66,9 @@ void Tile::onClickRight() {
     if (currentState == HIDDEN) {
         currentState = FLAGGED;
         sprite.setTexture(*toolbox.flagged);
-        toolbox.gameState->incrementFlag(true);
     } else if (currentState == FLAGGED) {
         currentState = HIDDEN;
         sprite.setTexture(*toolbox.hidden);
-        toolbox.gameState->incrementFlag(false);
     }
 }
 
@@ -102,8 +80,9 @@ void Tile::draw() const {
 void Tile::revealNeighbors() {
     for(Tile* neighbor : neighbors){
         if(neighbor && neighbor->getState()==HIDDEN){
-            if(neighbor->mine==9){
-                neighbor->setState(EXPLODED);
+            Bomb *derived=dynamic_cast<Bomb*>(neighbor);
+            if(derived != nullptr && derived->getState()!=FLAGGED){
+                derived->setState(EXPLODED);
             }
             else{
                 if(neighbor->getState()!=REVEALED){

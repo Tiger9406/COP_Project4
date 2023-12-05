@@ -16,5 +16,7 @@ add_executable(COP_Project4
         GameState.cpp
         GameState.h
         minesweeper.cpp
-        minesweeper.h)
+        minesweeper.h
+        Bomb.cpp
+        Bomb.h)
 target_link_libraries(COP_Project4 sfml-graphics sfml-audio)

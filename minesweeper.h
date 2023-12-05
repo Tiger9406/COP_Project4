@@ -12,8 +12,6 @@
 
 Toolbox& toolbox = Toolbox::getInstance();
 
-bool debugMode=false;
-
 sf::Sprite dig1;
 sf::Sprite dig2;
 sf::Sprite dig3;
@@ -48,53 +46,119 @@ void render() {
     toolbox.window.draw(*toolbox.newGameButton->getSprite());
     toolbox.window.draw(*toolbox.testButton1->getSprite());
     toolbox.window.draw(*toolbox.testButton2->getSprite());
+    toolbox.window.draw(*toolbox.testButton3->getSprite());
 
-    toolbox.gameState->draw();
+    int y = 0;
+    int x = 0;
+    int total=0;
+    int revealed=0;
+    while(toolbox.gameState->getTile(x,y)!= nullptr){
+        while(toolbox.gameState->getTile(x,y)!=nullptr){
+            Tile *t=toolbox.gameState->getTile(x,y);
+            t->draw();
+            x++;
+            total++;
+            if(t->getState()==Tile::REVEALED){
+                revealed++;
+            }
+        }
+        x=0;
+        y++;
+    }
 
+    if(total-toolbox.gameState->getMineCount()==revealed){
+        toolbox.gameState->setPlayStatus(GameState::WIN);
+        toolbox.newGameButton->setSprite(toolbox.win_sprite);
+    }
     drawDigits();
 }
 
 void restart() {
-    toolbox.gameState= new GameState();
-
+    toolbox.gameState=new GameState();
 }
 
 
 void toggleDebugMode() {
     toolbox.debug=!toolbox.debug;
-    toolbox.gameState->toggleMine();
+    int y = 0;
+    int x = 0;
+    while(toolbox.gameState->getTile(x,y)!= nullptr) {
+        while (toolbox.gameState->getTile(x, y) != nullptr) {
+            Tile *t = toolbox.gameState->getTile(x, y);
+            Bomb *derived=dynamic_cast<Bomb*>(t);
+            if(derived!= nullptr){
+                derived->setState(Tile::HIDDEN);
+            }
+            x++;
+        }
+        x=0;
+        y++;
+    }
 }
 
-bool getDebugMode() {
-    return toolbox.debug;
-}
 
 void handleMouseClick(sf::Event &event){
     sf::Vector2f mouse_pos=toolbox.window.mapPixelToCoords(sf::Mouse::getPosition(toolbox.window));
     bool left= event.mouseButton.button==sf::Mouse::Left;
     if(mouse_pos.y>530.0f){
-        if(toolbox.newGameButton->clicked(mouse_pos, left)){
+        if(toolbox.newGameButton->getSprite()->getGlobalBounds().contains(mouse_pos) && left){
+            toolbox.newGameButton->onClick();
             toolbox.newGameButton->setSprite(toolbox.happy_sprite);
             toolbox.debug=false;
             return;
         }
-        else if(toolbox.debugButton->clicked(mouse_pos, left)){
+        else if(toolbox.gameState->getPlayStatus()==GameState::PLAYING && toolbox.debugButton->getSprite()->getGlobalBounds().contains(mouse_pos) && left){
             toggleDebugMode();
             return;
         }
-        else if(toolbox.testButton1->clicked(mouse_pos, left)){
+        else if(toolbox.testButton1->getSprite()->getGlobalBounds().contains(mouse_pos) && left){
+            toolbox.testButton1->onClick();
             toolbox.newGameButton->setSprite(toolbox.happy_sprite);
             toolbox.debug=false;
             return;
         }
-        else if(toolbox.testButton2->clicked(mouse_pos, left)){
+        else if(toolbox.testButton2->getSprite()->getGlobalBounds().contains(mouse_pos) && left){
+            toolbox.testButton2->onClick();
+            toolbox.newGameButton->setSprite(toolbox.happy_sprite);
+            toolbox.debug=false;
+            return;
+        }
+        else if(toolbox.testButton3->getSprite()->getGlobalBounds().contains(mouse_pos) && left){
+            toolbox.testButton3->onClick();
             toolbox.newGameButton->setSprite(toolbox.happy_sprite);
             toolbox.debug=false;
             return;
         }
     }
     else{
-        toolbox.gameState->onClick(mouse_pos, left);
+        if(toolbox.gameState->getPlayStatus()==GameState::PLAYING){
+            int x=static_cast<int>(mouse_pos.x/32.0f);
+            int y=static_cast<int>(mouse_pos.y/32.0f);
+            Tile* clicked_tile=toolbox.gameState->getTile(x, y);
+            if(clicked_tile && left){
+                clicked_tile->onClickLeft();
+                if(toolbox.gameState->getPlayStatus()==GameState::LOSS){
+                    toolbox.debug=true;
+                    int y2 = 0;
+                    int x2 = 0;
+                    while(toolbox.gameState->getTile(x2,y2)!= nullptr) {
+                        while (toolbox.gameState->getTile(x2, y2) != nullptr) {
+                            Tile *t = toolbox.gameState->getTile(x2, y2);
+                            Bomb *derived=dynamic_cast<Bomb*>(t);
+                            if(derived!= nullptr && derived->getState()!=Bomb::EXPLODED){
+                                derived->setState(Tile::HIDDEN);
+                            }
+                            x2++;
+                        }
+                        x2=0;
+                        y2++;
+                    }
+                }
+            }
+            else if(clicked_tile){
+                clicked_tile->onClickRight();
+            }
+        }
     }
 }
 
@@ -129,7 +193,7 @@ int launch() {
 }
 
 
-int main(){ return launch(); }
+int main();
 
 
 #endif //COP_PROJECT4_MINESWEEPER_H

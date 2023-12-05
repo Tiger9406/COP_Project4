@@ -10,33 +10,37 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "Bomb.h"
 
 
 GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) : dimensions(_dimensions), numberOfMines(_numberOfMines), flagCount(0), playStatus(PLAYING) {
-    tilesLeft=static_cast<int>(dimensions.x*dimensions.y);
+    int tilesLeft=static_cast<int>(dimensions.x*dimensions.y);
     for(int i = 0; i < dimensions.y; i++){
         for(int j = 0; j < dimensions.x; j++){
             sf::Vector2f vec(static_cast<float>(j*32), static_cast<float>(i*32));
-            Tile tile= Tile(vec);
+            Tile *tile= new Tile(vec);
             tiles.push_back(tile);
         }
     }
-
     std::vector<Tile*> copied_tiles;
     copied_tiles.reserve(tiles.size());
-    for(auto &t:tiles){
-        copied_tiles.push_back(&t);
+    for(auto t:tiles){
+        copied_tiles.push_back(t);
     }
     std::random_device rand;
     std::mt19937 g(rand());
     std::shuffle(copied_tiles.begin(), copied_tiles.end(), g);
-    for(int i = 0; i < numberOfMines; i++){
-        copied_tiles[i]->mine=9;
+    for(int i = 0; i < numberOfMines && i < tilesLeft; i++){
+        Tile *placeholder = copied_tiles[i];
+        sf::Vector2f copy(placeholder->getLocation());
+        Bomb *newBomb = new Bomb(copy);
+        copied_tiles[i]=newBomb;
+        int index=static_cast<int>(copy.x/32+copy.y/32*dimensions.x);
+        tiles[index]=newBomb;
+        delete placeholder;
     }
     setTileMineStatus();
 }
-
-
 
 
 GameState::GameState(const char* filepath) : playStatus(PLAYING), flagCount(0) {
@@ -49,43 +53,42 @@ GameState::GameState(const char* filepath) : playStatus(PLAYING), flagCount(0) {
     std::string line;
     int y=0;
     while (std::getline(file, line)) {
-        if(y==0){
-            dimensions.x=line.length();
-        }
-        std::istringstream iss(line);
-        for (int i = 0; i < line.length(); i++) {
-            sf::Vector2f vec(static_cast<float>(i*32), static_cast<float>(y*32));
-            Tile tile= Tile(vec);
-            if(line[i]=='1'){
-                tile.mine=9;
-                numberOfMines++;
+        if(line!=""){
+            if(y==0){
+                dimensions.x=line.length();
             }
-            tiles.push_back(tile);
+            std::istringstream iss(line);
+            for (int i = 0; i < line.length(); i++) {
+                sf::Vector2f vec(static_cast<float>(i*32), static_cast<float>(y*32));
+                if(line[i]=='1'){
+                    Bomb *bomb = new Bomb(vec);
+                    bomb->draw();
+                    numberOfMines++;
+                    tiles.push_back(bomb);
+                    tiles[0]->draw();
+                }
+                else{
+                    Tile *tile= new Tile(vec);
+                    tiles.push_back(tile);
+                }
+            }
+            y++;
         }
-        y++;
     }
     dimensions.y=y;
-    tilesLeft=dimensions.x*y;
+
     setTileMineStatus();
 }
-void GameState::toggleMine(){
-    for(Tile &t : tiles){
-        if(t.mine==9){
-            t.setState(Tile::HIDDEN);
-        }
-    }
-}
+
 
 int GameState::getFlagCount() {
+    flagCount=0;
+    for(Tile *t : tiles){
+        if(t->getState()==Tile::FLAGGED){
+            flagCount++;
+        }
+    }
     return flagCount;
-}
-void GameState::incrementFlag(bool placed){
-    if(placed){
-        flagCount++;
-    }
-    else{
-        flagCount--;
-    }
 }
 
 int GameState::getMineCount() {
@@ -97,7 +100,7 @@ Tile* GameState::getTile(int x, int y) {
     if (x >= 0 && x < dimensions.x && y >= 0 && y < dimensions.y) {
         // calculate index 2D->1D
         int index = x + y * dimensions.x;
-        return &tiles[index];
+        return tiles[index];
     }
     return nullptr;
 }
@@ -112,9 +115,9 @@ void GameState::setPlayStatus(PlayStatus _status) {
 
 void GameState::setTileMineStatus(){
     int current=0;
-    for(Tile &t : tiles){
+    for(Tile *t : tiles){
         std::array<Tile*, 8> neighbors;
-        sf::Vector2f pos = t.getLocation();
+        sf::Vector2f pos = t->getLocation();
         if(pos.x-1<0){
             neighbors[0]=nullptr;
             neighbors[1]=nullptr;
@@ -138,64 +141,37 @@ void GameState::setTileMineStatus(){
         for(int i =0; i < 8; i++){
             if(neighbors[i]!=nullptr){
                 if(i==0){
-                    neighbors[i]=&tiles[current-dimensions.x-1];
+                    neighbors[i]=tiles[current-dimensions.x-1];
                 }
                 else if(i==1){
-                    neighbors[i]=&tiles[current-1];
+                    neighbors[i]=tiles[current-1];
                 }
                 else if(i==2){
-                    neighbors[i]=&tiles[current+dimensions.x-1];
+                    neighbors[i]=tiles[current+dimensions.x-1];
                 }
                 else if(i==3){
-                    neighbors[i]=&tiles[current-dimensions.x];
+                    neighbors[i]=tiles[current-dimensions.x];
                 }
                 else if(i==4){
-                    neighbors[i]=&tiles[current+dimensions.x];
+                    neighbors[i]=tiles[current+dimensions.x];
                 }
                 else if(i==5){
-                    neighbors[i]=&tiles[current-dimensions.x+1];
+                    neighbors[i]=tiles[current-dimensions.x+1];
                 }
                 else if(i==6){
-                    neighbors[i]=&tiles[current+1];
+                    neighbors[i]=tiles[current+1];
                 }
                 else if(i==7){
-                    neighbors[i]=&tiles[current+dimensions.x+1];
+                    neighbors[i]=tiles[current+dimensions.x+1];
                 }
             }
         }
-        t.setNeighbors(neighbors);
-        neighbors.fill(&t);
+        t->setNeighbors(neighbors);
 
-        if(t.mine!=9){
-            int mineCount=0;
-            for(Tile *n : t.getNeighbors()){
-                if(n!= nullptr && n->mine==9){
-                    mineCount++;
-                }
-            }
-            t.mine=mineCount;
-        }
+
+        neighbors.fill(t);
+
         current++;
     }
 }
 
-void GameState::draw(){
-    for(Tile &t : tiles){
-        t.draw();
-    }
-}
-
-void GameState::onClick(sf::Vector2f& click_pos, bool left){
-    if(playStatus==PLAYING){
-        int x=static_cast<int>(click_pos.x/32.0f);
-        int y=static_cast<int>(click_pos.y/32.0f);
-        Tile* clicked_tile=getTile(x, y);
-        if(clicked_tile && left){
-            clicked_tile->onClickLeft();
-        }
-        else if(clicked_tile && !left){
-            clicked_tile->onClickRight();
-        }
-    }
-
-}

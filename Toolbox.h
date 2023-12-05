@@ -9,8 +9,8 @@
 
 #include "GameState.h"
 #include "Button.h"
-
 #include <iostream>
+
 
 
 class Toolbox {
@@ -22,10 +22,11 @@ public:
     sf::Sprite *lose_sprite;
     sf::Sprite *win_sprite;
 
-    Button* debugButton;
-    Button* newGameButton;
-    Button* testButton1;
-    Button* testButton2;
+    Button *debugButton;
+    Button *newGameButton;
+    Button *testButton1;
+    Button *testButton2;
+    Button *testButton3;
 
     static Toolbox& getInstance();
 
@@ -34,14 +35,15 @@ public:
     sf::Texture *flagged;
     sf::Texture *bombed;
     sf::Texture *debug_bomb;
+    std::vector<sf::Texture*> numbers;
+    sf::Texture *digits;
 
     bool debug;
 
-    std::vector<sf::Texture*> numbers;
-
-    sf::Texture *digits;
+    int tilesLeft;
 
 private:
+    void newGame(const char* filepath);
     Toolbox(const Toolbox&);
     Toolbox& operator=(const Toolbox&);
     Toolbox();

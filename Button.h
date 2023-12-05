@@ -17,8 +17,7 @@ public:
     sf::Sprite* getSprite();
     void setSprite(sf::Sprite* _sprite);
     void onClick();
-    bool clicked(sf::Vector2f& click_pos, bool left);
-    void setOnClick(std::function<void(void)> _onClick);
+
 private:
     sf::Vector2f position;
     sf::Sprite* sprite;

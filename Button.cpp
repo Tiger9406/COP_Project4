@@ -21,9 +21,6 @@ sf::Sprite* Button::getSprite() {
 }
 
 void Button::setSprite(sf::Sprite* _sprite){
-//    delete sprite;
-//    sf::Sprite *sprite_copy = new sf::Sprite(*_sprite);
-//    sprite=sprite_copy;
     sprite=_sprite;
     sprite->setPosition(position.x, position.y);
 }
@@ -31,13 +28,4 @@ void Button::setSprite(sf::Sprite* _sprite){
 
 void Button::onClick(){
     onClickCallback();
-}
-
-
-bool Button::clicked(sf::Vector2f& click_pos, bool left){
-    if(sprite->getGlobalBounds().contains(click_pos) && left){
-        onClickCallback();
-        return true;
-    }
-    return false;
 }

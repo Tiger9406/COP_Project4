@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Tile.h"
+#include "Bomb.h"
 
 
 class GameState {
@@ -22,18 +23,19 @@ public:
     PlayStatus getPlayStatus();
     void setPlayStatus(PlayStatus _status);
 
-    void toggleMine();
-    void setTileMineStatus();
-    void onClick(sf::Vector2f& click_pos, bool left);
-    void draw();
-    void incrementFlag(bool up);
-    int tilesLeft;
 private:
     sf::Vector2i dimensions;
     int numberOfMines;
     int flagCount;
     PlayStatus playStatus;
-    std::vector<Tile> tiles;
+    std::vector<Tile*> tiles;
+    void setTileMineStatus();
+    std::vector<int> mines;
+    ~GameState(){
+        for(Tile *t:tiles){
+            delete t;
+        }
+    }
 };
 
 

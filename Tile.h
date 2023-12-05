@@ -19,22 +19,22 @@ public:
     };
     Tile(sf::Vector2f position);
     sf::Vector2f getLocation();
-    State getState();
+    virtual State getState();
     std::array<Tile*, 8>& getNeighbors();
-    void setState(State _state);
+    virtual void setState(State _state);
     void setNeighbors(std::array<Tile*, 8> _neighbors);
-    void onClickLeft();
-    void onClickRight();
-    void draw() const;
-    sf::Sprite sprite;
-    int mine=0; //9 for mine, 0-8 for neighboring
+    virtual void onClickLeft();
+    virtual void onClickRight();
+    virtual void draw() const;
 
 protected:
     void revealNeighbors();
 private:
+    sf::Sprite sprite;
     sf::Vector2f position;
     State currentState;
     std::array<Tile*, 8> neighbors;
+    int mine=0;
 };
 
 
